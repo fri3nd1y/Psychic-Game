@@ -5,22 +5,26 @@ var guessedArray = [];
 var userInput = "0";
 
 var play = 1; // Boolean if user wants to keep playing, currently true for 1st game.
-// var playAgainBoo = 1; // Boolean to allow only f or t key input for restarting the game.
 var wins = 0;
 var losses = 0;
 var lives = 10; // How many guesses left.
 
 function renderLetter() {
-    if (play > 0) {
-        lives = 10;
+
+    randomizedAnswer();
+/*     if (play === 1) {
         randomizedAnswer();
     }
-    else {
+    if (play === 0) {
         document.querySelector("#prompt").innerHTML = "Game Over!";
-    }
+    } */
 }
 
-function playAgain () {
+function randomizedAnswer() {
+    answer = guessArray[Math.floor(Math.random() * guessArray.length)]; // Randomly picks one letter out of array to be the key "answer"
+}
+
+/* function playAgain () {
     document.querySelector("#prompt").innerHTML = ("Would you like to play again?");
     if (userInput === "t") {
         play = 1;
@@ -28,16 +32,12 @@ function playAgain () {
         document.querySelector("#prompt").innerHTML = ("Guess what letter I'm thinking of");
     }
     if (userInput === "f") {
-        throw new Error("GAME OVER.");
+        play = 0;
     }
     else {
         alert("Type only [t] or [f] to play again.")
     }
-}
-
-function randomizedAnswer() {
-    answer = guessArray[Math.floor(Math.random() * guessArray.length)]; // Randomly picks one letter out of array to be the key "answer"
-}
+} */
 
 function updateValues () {
     document.querySelector("#wins").innerHTML = "Wins: " + wins;
@@ -46,52 +46,64 @@ function updateValues () {
     document.querySelector("#guesses").innerHTML = "Your Guesses so far: " + guessedArray.toString();
 }
 
+function reset () {
+    lives = 10;
+    guessedArray = [];
+    renderLetter();
+}
+
 renderLetter();
 
 document.onkeyup = function(event) {
 
-    userInput = event.key.toLowerCase();
+    userInput = event.key.toLowerCase(); {
 
-    if (userInput === answer) {
-        alert("Correct!");
-        wins++;
-        updateValues();
-        playAgain();
-      }
-    if (lives === 1) {
-        losses++;
-        updateValues();
-        playAgain();
-        lives = 10;
-      } 
-    else {
-        lives--;
-        guessedArray.push(userInput);
-        updateValues();
-      }
-
-    /* if (userInput === guessArray.includes(userInput)) {
-
-      if (userInput === answer) {
-        alert("Correct!");
-        wins++;
-        updateValues();
-      }
-      if (lives === 0) {
-          losses++;
-          updateValues();
-          playAgain();
-          renderLetter();
-      } else {
-          lives--;
-          guessedArray.push(userInput);
-          updateValues;
-      }
-
+        if (userInput === answer) {
+            wins++;
+            lives = 10;
+            guessedArray = [];
+            updateValues();
+            alert("Hey, you won. Resetting the game. Answer was: " + answer);
+            reset();
+          }
+        if (lives === 0) {
+            losses++;
+            lives = 10;
+            guessedArray = [];
+            play = 0;
+            updateValues();
+            alert("Hey, you lost. Resetting the game. Answer was: " + answer);
+            reset();
+          } 
+        else {
+            lives--;
+            guessedArray.push(userInput);
+            updateValues();
+          }
     }
-    else {
-        alert("Guess is invalid, must be alphabetical!");
-      } */
-  };
 
-  console.log(userInput);
+/*     if (play === 1) {
+        if (userInput === answer) {
+            alert("Correct!");
+            wins++;
+            lives = 10;
+            guessedArray = [];
+            updateValues();
+            playAgain();
+          }
+        if (lives === 0) {
+            losses++;
+            lives = 10;
+            guessedArray = [];
+            play = 0;
+            updateValues();
+            playAgain();
+            updateValues();
+          } 
+        else {
+            lives--;
+            guessedArray.push(userInput);
+            updateValues();
+          }
+    } */
+}
